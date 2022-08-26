@@ -22,7 +22,7 @@ export default class DiceOfFaith {
         this.isTried = false;
     }
 
-    initialize() {
+    initialize(): void {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             this.swiper.swipeContainer.addEventListener('touchstart', (ev) => {
                 this.swiper.onTouchStart(ev, this);
@@ -41,14 +41,13 @@ export default class DiceOfFaith {
             });
         }
 
-
         this.visualizer.initialize();
         this.cubeWithTexts.initialize();
         this.visualizer.appendObjectToScene(this.cubeWithTexts.generatedCube);
         this.visualizer.cameraPosition = this.cubeWithTexts.cubeSize * 2;
     }
 
-    showResetButton() {
+    showResetButton(): void {
         const button = document.querySelector('.finish-button');
         button.classList.remove('hidden');
         button.addEventListener('click', () => {

@@ -24,23 +24,23 @@ export default class Swiper {
         this.time = 0;
     }
 
-    onMouseDown(event: MouseEvent, gameCoordinator: DiceOfFaith) {
+    onMouseDown(event: MouseEvent, gameCoordinator: DiceOfFaith): void {
         this.startMeasuring(event.offsetX, event.offsetY, gameCoordinator);
     }
 
-    onMouseUp(event: MouseEvent, visualizer: Visualizer, gameCoordinator: DiceOfFaith) {
+    onMouseUp(event: MouseEvent, visualizer: Visualizer, gameCoordinator: DiceOfFaith): void {
         this.endMeasuring(event.offsetX, event.offsetY, visualizer, gameCoordinator);
     }
 
-    onTouchStart(event: TouchEvent, gameCoordinator: DiceOfFaith) {
+    onTouchStart(event: TouchEvent, gameCoordinator: DiceOfFaith): void {
         this.startMeasuring(event.touches.item(0).clientX, event.touches.item(0).clientY, gameCoordinator);
     }
 
-    onTouchEnd(event: TouchEvent, visualizer: Visualizer, gameCoordinator: DiceOfFaith) {
+    onTouchEnd(event: TouchEvent, visualizer: Visualizer, gameCoordinator: DiceOfFaith): void {
         this.endMeasuring(event.changedTouches.item(0).clientX, event.changedTouches.item(0).clientY, visualizer, gameCoordinator);
     }
 
-    endMeasuring(x: number, y: number, visualizer: Visualizer, gameCoordinator: DiceOfFaith) {
+    endMeasuring(x: number, y: number, visualizer: Visualizer, gameCoordinator: DiceOfFaith): void {
         if (!gameCoordinator.isTried) {
             clearInterval(this.timeDetectInterval);
             if (Math.abs(this.mouseDownCoords.x - x) > Math.abs(this.mouseDownCoords.y - y)) {
@@ -55,7 +55,7 @@ export default class Swiper {
         }
     }
 
-    startMeasuring(x: number, y: number, gameCoordinator: DiceOfFaith) {
+    startMeasuring(x: number, y: number, gameCoordinator: DiceOfFaith): void {
         if (!gameCoordinator.isTried) {
             this.mouseDownCoords.x = x;
             this.mouseDownCoords.y = y;
@@ -65,13 +65,13 @@ export default class Swiper {
         }
     }
 
-    clearDate() {
+    clearDate(): void {
         this.mouseDownCoords.x = 0
         this.mouseDownCoords.y = 0
         this.time = 0;
     }
 
-    timeChange() {
-        return this.time += this.timeMeasurementError;
+    timeChange(): void {
+        this.time += this.timeMeasurementError;
     }
 }

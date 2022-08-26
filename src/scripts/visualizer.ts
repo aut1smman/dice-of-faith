@@ -38,7 +38,7 @@ export default class Visualizer {
         };
     }
 
-    initialize() {
+    initialize(): void {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -60,12 +60,12 @@ export default class Visualizer {
         }, this.timeMeasurementError * 1000 );
     }
 
-    appendObjectToScene(object: THREE.Mesh) {
+    appendObjectToScene(object: THREE.Mesh): void {
         this.scene.add(object);
         this.camera.lookAt(object.position);
     }
 
-    renderFrame(context: Visualizer) {
+    renderFrame(context: Visualizer): void {
         this.rotateCube();
         context.renderer.render(context.scene, context.camera);
     }
@@ -76,7 +76,7 @@ export default class Visualizer {
         this.changeVelocity();
     }
 
-    changeVelocity() {
+    changeVelocity(): void {
         if (this.velocity.y) {
             if (this.velocity.y > 200) {
                 this.velocity.y -= 5;
@@ -100,7 +100,7 @@ export default class Visualizer {
         }
     }
 
-    resetAll() {
+    resetAll(): void {
         this.velocity.x = 0;
         this.velocity.y = 0;
         this.scene.children[1].rotation.y = 0;
