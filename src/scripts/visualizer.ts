@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import DiceOfFaith from './dice-of-faith';
 
 type Velocity = {
     x: number;
     y: number;
-}
+};
 
 export default class Visualizer {
     scene: THREE.Scene;
@@ -17,7 +17,7 @@ export default class Visualizer {
     velocity: Velocity;
     gameCoordinator: DiceOfFaith;
 
-    constructor(timeMeasurementError: number, cameraPosition:THREE.Vector3, gameCoordinator: DiceOfFaith) {
+    constructor(timeMeasurementError: number, cameraPosition: THREE.Vector3, gameCoordinator: DiceOfFaith) {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
             75,
@@ -52,8 +52,9 @@ export default class Visualizer {
                 this.scene.scale.set(this.camera.aspect, this.camera.aspect, this.camera.aspect);
             }
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-        window.addEventListener("resize", onWindowResize);
+        };
+
+        window.addEventListener('resize', onWindowResize);
 
         this.frameInterval = setInterval(() => {
             this.renderFrame(this);
@@ -82,7 +83,7 @@ export default class Visualizer {
                 this.velocity.y -= 5;
             } else if (this.velocity.y < -200) {
                 this.velocity.y += 5;
-            } else if ( Math.abs(this.scene.children[1].rotation.x/Math.PI * 180) % 90 < 5) {
+            } else if ( Math.abs(this.scene.children[1].rotation.x / Math.PI * 180) % 90 < 5) {
                 this.velocity.y = 0;
                 this.gameCoordinator.showResetButton();
             }
@@ -93,7 +94,7 @@ export default class Visualizer {
                 this.velocity.x -= 5;
             } else if (this.velocity.x < -200) {
                 this.velocity.x += 5;
-            } else if ( Math.abs(this.scene.children[1].rotation.y/Math.PI * 180) % 90 < 5) {
+            } else if ( Math.abs(this.scene.children[1].rotation.y / Math.PI * 180) % 90 < 5) {
                 this.velocity.x = 0;
                 this.gameCoordinator.showResetButton();
             }
@@ -115,7 +116,7 @@ export default class Visualizer {
         return {
             x: this.velocity.x / window.innerWidth * this.timeMeasurementError * -1,
             y: this.velocity.y / window.innerHeight * this.timeMeasurementError * -1,
-        }
+        };
     }
 
 }

@@ -1,5 +1,5 @@
-import DiceOfFaith from "./dice-of-faith";
-import Visualizer from "./visualizer";
+import DiceOfFaith from './dice-of-faith';
+import Visualizer from './visualizer';
 
 export default class Swiper {
     swipeContainer: HTMLElement;
@@ -7,7 +7,7 @@ export default class Swiper {
     mouseDownCoords: {
         x: number;
         y: number;
-    }
+    };
     time: number;
     timeDetectInterval: NodeJS.Timeout;
 
@@ -20,7 +20,7 @@ export default class Swiper {
         this.mouseDownCoords = {
             x: 0,
             y: 0,
-        }
+        };
         this.time = 0;
     }
 
@@ -33,11 +33,15 @@ export default class Swiper {
     }
 
     onTouchStart(event: TouchEvent, gameCoordinator: DiceOfFaith): void {
-        this.startMeasuring(event.touches.item(0).clientX, event.touches.item(0).clientY, gameCoordinator);
+        this.startMeasuring(event.touches.item(0).clientX,
+            event.touches.item(0).clientY,
+            gameCoordinator);
     }
 
     onTouchEnd(event: TouchEvent, visualizer: Visualizer, gameCoordinator: DiceOfFaith): void {
-        this.endMeasuring(event.changedTouches.item(0).clientX, event.changedTouches.item(0).clientY, visualizer, gameCoordinator);
+        this.endMeasuring(event.changedTouches.item(0).clientX,
+            event.changedTouches.item(0).clientY,
+            visualizer, gameCoordinator);
     }
 
     endMeasuring(x: number, y: number, visualizer: Visualizer, gameCoordinator: DiceOfFaith): void {
@@ -66,8 +70,8 @@ export default class Swiper {
     }
 
     clearDate(): void {
-        this.mouseDownCoords.x = 0
-        this.mouseDownCoords.y = 0
+        this.mouseDownCoords.x = 0;
+        this.mouseDownCoords.y = 0;
         this.time = 0;
     }
 

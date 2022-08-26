@@ -1,6 +1,6 @@
-import CubeWithTexts from "./cube-with-texts";
-import Swiper from "./swiper";
-import Visualizer from "./visualizer";
+import CubeWithTexts from './cube-with-texts';
+import Swiper from './swiper';
+import Visualizer from './visualizer';
 
 export default class DiceOfFaith {
     swiper: Swiper;
@@ -54,6 +54,6 @@ export default class DiceOfFaith {
             this.visualizer.resetAll();
             this.isTried = false;
             button.classList.add('hidden');
-        })
+        });
     }
 }

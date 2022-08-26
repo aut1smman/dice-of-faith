@@ -1,10 +1,10 @@
-import {FontLoader, TextGeometry, Vector3} from "three";
-import THREE = require("three");
+import {FontLoader, TextGeometry, Vector3} from 'three';
+import THREE = require('three');
 
 type textPositionAndRotation = {
     position: THREE.Vector3;
     rotation: THREE.Vector3;
-}
+};
 
 export default class CubeWithTexts {
     cubeSize: number;
@@ -16,7 +16,7 @@ export default class CubeWithTexts {
     constructor(
         size = 1,
         cubeColor = 0xFFFFFFFF,
-        textColor:number,
+        textColor: number,
         texts = ['', '', '', '', '', ''],
     ) {
         this.cubeSize = size;
@@ -47,8 +47,8 @@ export default class CubeWithTexts {
                 const geometry = new TextGeometry(
                     text,
                     {
-                        font: font,
-                        size: this.cubeSize*0.1,
+                        font,
+                        size: this.cubeSize * 0.1,
                         height: 0.1,
                         curveSegments: 12,
                         bevelEnabled: false,
@@ -70,39 +70,39 @@ export default class CubeWithTexts {
         switch (index) {
             case 0: {
                 return {
-                    position: new THREE.Vector3(0, 0,-this.cubeSize / 2 - 0.02),
+                    position: new THREE.Vector3(0, 0, -this.cubeSize / 2 - 0.02),
                     rotation: new THREE.Vector3(0, Math.PI, 0),
-                }
+                };
             }
             case 1: {
                 return {
-                    position: new THREE.Vector3(0, 0,this.cubeSize / 2 + 0.02),
+                    position: new THREE.Vector3(0, 0, this.cubeSize / 2 + 0.02),
                     rotation: new THREE.Vector3(0, 0, 0),
-                }
+                };
             }
             case 2: {
                 return {
                     position: new THREE.Vector3(-this.cubeSize / 2 - 0.02, 0, 0),
-                    rotation: new THREE.Vector3(0, 3*Math.PI/2, 0),
-                }
+                    rotation: new THREE.Vector3(0, 3 * Math.PI / 2, 0),
+                };
             }
             case 3: {
                 return {
                     position: new THREE.Vector3(this.cubeSize / 2 + 0.02, 0, 0),
-                    rotation: new THREE.Vector3(0, Math.PI/2, 0),
-                }
+                    rotation: new THREE.Vector3(0, Math.PI / 2, 0),
+                };
             }
             case 4: {
                 return {
                     position: new THREE.Vector3(0, this.cubeSize / 2 + 0.02, 0),
-                    rotation: new THREE.Vector3(-Math.PI/2, 0, 0),
-                }
+                    rotation: new THREE.Vector3(-Math.PI / 2, 0, 0),
+                };
             }
             case 5: {
                 return {
                     position: new THREE.Vector3(0, -this.cubeSize / 2 - 0.02, 0),
-                    rotation: new THREE.Vector3(Math.PI/2, 0, 0),
-                }
+                    rotation: new THREE.Vector3(Math.PI / 2, 0, 0),
+                };
             }
         }
         return {
@@ -113,8 +113,6 @@ export default class CubeWithTexts {
 
     appendTextToCube(cube: THREE.Mesh, text: THREE.Mesh, index: number): THREE.Mesh {
         cube.position.set(0, 0, 0);
-        var box = new THREE.Box3().setFromObject( text );
-        var vector3 = new THREE.Vector3(0, 0, 0);
         const positionAndRotation: textPositionAndRotation = this.getTextPosition(index);
         text.position.copy(text.position.add(positionAndRotation.position));
         text.rotation.setFromVector3(positionAndRotation.rotation);
