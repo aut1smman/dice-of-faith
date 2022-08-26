@@ -1,0 +1,43 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: rgb(116,111,198);
+    background: radial-gradient(circle, rgba(116,111,198,1) 0%, rgba(134,134,219,1) 25%, rgba(157,124,222,1) 51%, rgba(123,141,222,1) 85%, rgba(0,212,255,1) 100%);
+}
+
+.game-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.finish-button {
+    width: 30%;
+    height: 5%;
+    position: fixed;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, -5%);
+    background: dimgray;
+    color: #FAFAFA;
+    border: none;
+    font-size: 32px;
+    box-sizing: border-box;
+    transition: 0.2s;
+    border-radius: 3px;
+    z-index: 100;
+}
+
+.finish-button.hidden {
+    visibility: hidden;
+}
