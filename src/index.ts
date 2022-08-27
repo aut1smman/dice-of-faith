@@ -7,3 +7,6 @@ const diceOfFaith = new DiceOfFaith(0.01, new THREE.Vector3(0, 0, 10),
 
 diceOfFaith.initialize();
 
+document.body.addEventListener('touchmove', e => {
+    e.preventDefault();
+}, { passive: false });
