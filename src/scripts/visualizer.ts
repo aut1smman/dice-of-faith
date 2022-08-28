@@ -1,23 +1,27 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import DiceOfFaith from './dice-of-faith';
-
-type Velocity = {
-    x: number;
-    y: number;
-};
+import SpeedController from './speed-controller';
+import { Velocity } from './types';
+import {Logger} from "codelyzer/util/logger";
 
 export default class Visualizer {
-    scene: THREE.Scene;
-    camera: THREE.PerspectiveCamera;
-    renderer: THREE.WebGLRenderer;
-    light: THREE.AmbientLight;
-    timeMeasurementError: number;
-    frameInterval: NodeJS.Timer;
-    velocity: Velocity;
-    gameCoordinator: DiceOfFaith;
+    private scene: THREE.Scene;
+    private camera: THREE.PerspectiveCamera;
+    private renderer: THREE.WebGLRenderer;
+    private light: THREE.AmbientLight;
+    private timeMeasurementError: number;
+    private frameInterval: NodeJS.Timer;
+    private velocityPower: Velocity;
+    private gameCoordinator: DiceOfFaith;
+    public speedController: SpeedController;
 
-    constructor(timeMeasurementError: number, cameraPosition: THREE.Vector3, gameCoordinator: DiceOfFaith) {
+    constructor(
+        timeMeasurementError: number,
+        cameraPosition: THREE.Vector3,
+        gameCoordinator: DiceOfFaith,
+        maxSpeed: number,
+    ) {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(
             75,
@@ -32,13 +36,15 @@ export default class Visualizer {
         this.camera.position.copy(cameraPosition);
         this.timeMeasurementError = timeMeasurementError;
         this.gameCoordinator = gameCoordinator;
-        this.velocity = {
+
+        this.speedController = new SpeedController(maxSpeed, gameCoordinator);
+        this.velocityPower = {
             x: 0,
             y: 0,
         };
     }
 
-    initialize(): void {
+    public initialize(): void {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
@@ -61,49 +67,64 @@ export default class Visualizer {
         }, this.timeMeasurementError * 1000 );
     }
 
-    appendObjectToScene(object: THREE.Mesh): void {
+    public appendObjectToScene(object: THREE.Mesh): void {
         this.scene.add(object);
         this.camera.lookAt(object.position);
     }
 
-    renderFrame(context: Visualizer): void {
+    private renderFrame(context: Visualizer): void {
         this.rotateCube();
         context.renderer.render(context.scene, context.camera);
     }
 
-    rotateCube(): void {
+    private rotateCube(): void {
         this.scene.children[1].rotation.y += this.adaptiveVelocity.x;
         this.scene.children[1].rotation.x += this.adaptiveVelocity.y;
-        this.changeVelocity();
+        this.speedController.changeSpeed(this.isBlockedChangingSpeed(), this.isEnd());
     }
 
-    changeVelocity(): void {
-        if (this.velocity.y) {
-            if (this.velocity.y > 200) {
-                this.velocity.y -= 5;
-            } else if (this.velocity.y < -200) {
-                this.velocity.y += 5;
-            } else if ( Math.abs(this.scene.children[1].rotation.x / Math.PI * 180) % 90 < 5) {
-                this.velocity.y = 0;
-                this.gameCoordinator.showResetButton();
-            }
+    private isBlockedChangingSpeed(): boolean {
+        if (
+            Math.abs(this.speedController.speed.x) <= this.speedController.maxSpeed * 0.1 &&
+            Math.abs(this.speedController.speed.x)
+        ) {
+            return true;
         }
 
-        if (this.velocity.x) {
-            if (this.velocity.x > 200) {
-                this.velocity.x -= 5;
-            } else if (this.velocity.x < -200) {
-                this.velocity.x += 5;
-            } else if ( Math.abs(this.scene.children[1].rotation.y / Math.PI * 180) % 90 < 5) {
-                this.velocity.x = 0;
-                this.gameCoordinator.showResetButton();
-            }
+        if (
+            Math.abs(this.speedController.speed.y) <= this.speedController.maxSpeed * 0.1 &&
+            Math.abs(this.speedController.speed.y)
+        ) {
+            return true;
         }
+
+        return false;
     }
 
-    resetAll(): void {
-        this.velocity.x = 0;
-        this.velocity.y = 0;
+    private isEnd(): boolean {
+        if (
+            (Math.abs(this.scene.children[1].rotation.y / Math.PI * 180) % 90 <= 5) &&
+            Math.abs(this.speedController.speed.x)
+        ) {
+            return true;
+        }
+
+        if (
+            (Math.abs(this.scene.children[1].rotation.x / Math.PI * 180) % 90 <= 5) &&
+            Math.abs(this.speedController.speed.y)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public resetAll(): void {
+        this.speedController.speedPower = {
+            x: 0,
+            y: 0,
+        }
+
         this.scene.children[1].rotation.y = 0;
         this.scene.children[1].rotation.x = 0;
     }
@@ -113,9 +134,10 @@ export default class Visualizer {
     }
 
     get adaptiveVelocity(): Velocity {
+        const velocity = this.speedController.speed;
         return {
-            x: this.velocity.x / window.innerWidth * this.timeMeasurementError * -1,
-            y: this.velocity.y / window.innerHeight * this.timeMeasurementError * -1,
+            x: velocity.x / window.innerWidth  * -0.05,
+            y: velocity.y / window.innerHeight * -0.05,
         };
     }
 

@@ -1,17 +1,13 @@
-import {FontLoader, TextGeometry, Vector3} from 'three';
+import { FontLoader, TextGeometry, Vector3 } from 'three';
 import THREE = require('three');
-
-type textPositionAndRotation = {
-    position: THREE.Vector3;
-    rotation: THREE.Vector3;
-};
+import { textPositionAndRotation } from './types';
 
 export default class CubeWithTexts {
-    cubeSize: number;
-    cubeColor: number;
-    textColor: number;
-    cubeSidesText: string[];
-    cube: THREE.Mesh;
+    private _cubeSize: number;
+    private cubeColor: number;
+    private textColor: number;
+    private cubeSidesText: string[];
+    private cube: THREE.Mesh;
 
     constructor(
         size = 1,
@@ -19,18 +15,18 @@ export default class CubeWithTexts {
         textColor: number,
         texts = ['', '', '', '', '', ''],
     ) {
-        this.cubeSize = size;
+        this._cubeSize = size;
         this.cubeColor = cubeColor;
         this.textColor = textColor;
         this.cubeSidesText = texts;
     }
 
-    initialize(): void {
+    public initialize(): void {
         this.cube = this.createCube();
         this.createTextsMeshsAndAppendToCube(this.cubeSidesText);
     }
 
-    createCube(): THREE.Mesh {
+    private createCube(): THREE.Mesh {
         const geometry = new THREE.BoxGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
         const material = new THREE.MeshBasicMaterial({
             color: this.cubeColor
@@ -39,7 +35,7 @@ export default class CubeWithTexts {
         return cube;
     }
 
-    createTextsMeshsAndAppendToCube(texts: string[]): THREE.Mesh[] {
+    private createTextsMeshsAndAppendToCube(texts: string[]): THREE.Mesh[] {
         const textsMeshs: THREE.Mesh[] = [];
         const loader = new FontLoader();
         loader.load('./fonts/Gilroy_Medium_Regular.json', font => {
@@ -66,7 +62,7 @@ export default class CubeWithTexts {
         return textsMeshs;
     }
 
-    getTextPosition(index: number): textPositionAndRotation {
+    private getTextPosition(index: number): textPositionAndRotation {
         switch (index) {
             case 0: {
                 return {
@@ -111,7 +107,7 @@ export default class CubeWithTexts {
         };
     }
 
-    appendTextToCube(cube: THREE.Mesh, text: THREE.Mesh, index: number): THREE.Mesh {
+    private appendTextToCube(cube: THREE.Mesh, text: THREE.Mesh, index: number): THREE.Mesh {
         cube.position.set(0, 0, 0);
         const positionAndRotation: textPositionAndRotation = this.getTextPosition(index);
         text.position.copy(text.position.add(positionAndRotation.position));
@@ -126,5 +122,9 @@ export default class CubeWithTexts {
         }
 
         return this.cube;
+    }
+
+    get cubeSize() {
+        return this._cubeSize;
     }
 }

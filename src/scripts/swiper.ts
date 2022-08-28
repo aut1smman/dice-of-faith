@@ -1,13 +1,11 @@
 import DiceOfFaith from './dice-of-faith';
+import { Coordinates } from './types';
 import Visualizer from './visualizer';
 
 export default class Swiper {
     swipeContainer: HTMLElement;
     timeMeasurementError: number;
-    mouseDownCoords: {
-        x: number;
-        y: number;
-    };
+    mouseDownCoords: Coordinates;
     time: number;
     timeDetectInterval: NodeJS.Timeout;
 
@@ -48,13 +46,18 @@ export default class Swiper {
         if (!gameCoordinator.isTried) {
             clearInterval(this.timeDetectInterval);
             if (Math.abs(this.mouseDownCoords.x - x) > Math.abs(this.mouseDownCoords.y - y)) {
-                visualizer.velocity.y = 0;
-                visualizer.velocity.x = Math.floor((this.mouseDownCoords.x - x) / this.time);
+                visualizer.speedController.speedPower = {
+                    x: (this.mouseDownCoords.x - x) / window.innerWidth,
+                    y: 0
+                };
             } else {
-                visualizer.velocity.x = 0;
-                visualizer.velocity.y = Math.floor((this.mouseDownCoords.y - y) / this.time);
+                visualizer.speedController.speedPower = {
+                    x: 0,
+                    y: (this.mouseDownCoords.y - y) / window.innerHeight
+                };
             }
             gameCoordinator.isTried = true;
+            visualizer.speedController.setStartSpeed();
             this.clearDate();
         }
     }

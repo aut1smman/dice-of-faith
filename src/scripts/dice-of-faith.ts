@@ -15,9 +15,10 @@ export default class DiceOfFaith {
         cubeColor: number,
         textColor: number,
         texts: string[],
+        maxSpeed: number,
     ) {
         this.swiper = new Swiper();
-        this.visualizer = new Visualizer(timeMeasurementError, cameraPosition, this);
+        this.visualizer = new Visualizer(timeMeasurementError, cameraPosition, this, maxSpeed);
         this.cubeWithTexts = new CubeWithTexts(size, cubeColor, textColor, texts);
         this.isTried = false;
     }
@@ -47,7 +48,7 @@ export default class DiceOfFaith {
         this.visualizer.cameraPosition = this.cubeWithTexts.cubeSize * 2;
     }
 
-    showResetButton(): void {
+    public showResetButton(): void {
         const button = document.querySelector('.finish-button');
         button.classList.remove('hidden');
         button.addEventListener('click', () => {
